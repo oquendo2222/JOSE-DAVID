@@ -1,158 +1,112 @@
-import React, { useState, useEffect } from 'react';
-import { getMedias, createMedia } from '../services/apiMedia';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getMedias } from '../services/apiMedia';
 import { getDirectores } from '../services/apiDirector';
 import { getGeneros } from '../services/apiGenero';
 import { getProductoras } from '../services/apiProductora';
 import { getTipos } from '../services/apiTipo';
-import '../App.css';
+
+const cards = [
+  {
+    title: 'Géneros',
+    description: 'Administra el catálogo principal y controla su estado activo o inactivo.',
+    route: '/generos',
+    key: 'generos',
+  },
+  {
+    title: 'Directores',
+    description: 'Registra directores principales habilitados para publicar media.',
+    route: '/directores',
+    key: 'directores',
+  },
+  {
+    title: 'Productoras',
+    description: 'Mantén las productoras con su estado, slogan y descripción institucional.',
+    route: '/productoras',
+    key: 'productoras',
+  },
+  {
+    title: 'Tipos',
+    description: 'Configura tipos de contenido como película o serie y extensiones futuras.',
+    route: '/tipos',
+    key: 'tipos',
+  },
+  {
+    title: 'Media',
+    description: 'Publica películas y series enlazando solo catálogos válidos y activos.',
+    route: '/media',
+    key: 'media',
+  },
+];
 
 function MainPage() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState({ generos: 0, directores: 0, productoras: 0, tipos: 0, media: 0 });
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [newMedia, setNewMedia] = useState({ title: '', director: '', year: '', genre: '', type: '' });
-
-  const [genres, setGenres] = useState([]);
-  const [types, setTypes] = useState([]);
-  const [directors, setDirectors] = useState([]);
-  const [allMovies, setAllMovies] = useState([]);
-
   useEffect(() => {
-    const loadOptions = async () => {
+    const loadDashboard = async () => {
       try {
-        const [genresRes, typesRes, directorsRes, moviesRes] = await Promise.all([
+        setLoading(true);
+        const [generos, directores, productoras, tipos, media] = await Promise.all([
           getGeneros(),
-          getTipos(),
           getDirectores(),
-          getMedias()
+          getProductoras(),
+          getTipos(),
+          getMedias(),
         ]);
-        setGenres(genresRes.data.data || []);
-        setTypes(typesRes.data.data || []);
-        setDirectors(directorsRes.data.data || []);
-        setAllMovies(Array.isArray(moviesRes.data) ? moviesRes.data : moviesRes.data.data || []);
-      } catch (err) {
-        console.error('Error loading options:', err);
+
+        setStats({
+          generos: generos.data.data.length,
+          directores: directores.data.data.length,
+          productoras: productoras.data.data.length,
+          tipos: tipos.data.data.length,
+          media: media.data.data.length,
+        });
+        setError('');
+      } catch (loadError) {
+        setError(loadError.response?.data?.message || loadError.message);
+      } finally {
+        setLoading(false);
       }
     };
-    loadOptions();
+
+    loadDashboard();
   }, []);
 
-  const loadData = async (type) => {
-    try {
-      setLoading(true);
-      setError('');
-      let response;
-
-      switch (type) {
-        case 'medias':
-          response = await getMedias();
-          setData({ type: 'Películas/Series', data: Array.isArray(response.data) ? response.data : response.data.data || [] });
-          break;
-        case 'directores':
-          const uniqueDirectors = [...new Set(allMovies.map(m => m.director))].filter(d => d).map(name => ({ nombre: name }));
-          setData({ type: 'Directores', data: uniqueDirectors });
-          break;
-        case 'generos':
-          const uniqueGenres = [...new Set(allMovies.map(m => m.genre))].filter(g => g).map(name => ({ nombre: name }));
-          setData({ type: 'Géneros', data: uniqueGenres });
-          break;
-        case 'productoras':
-          response = await getProductoras();
-          setData({ type: 'Productoras', data: response.data.data || [] });
-          break;
-        case 'tipos':
-          const uniqueTypes = [...new Set(allMovies.map(m => m.type))].filter(t => t).map(name => ({ nombre: name }));
-          setData({ type: 'Tipos', data: uniqueTypes });
-          break;
-        default:
-          break;
-      }
-    } catch (err) {
-      setError('Error al cargar los datos: ' + (err.response?.data?.message || err.message));
-      setData(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateMedia = async () => {
-    try {
-      await createMedia(newMedia);
-      setNewMedia({ title: '', director: '', year: '', genre: '', type: '' });
-      // Reload allMovies and options
-      const moviesRes = await getMedias();
-      setAllMovies(Array.isArray(moviesRes.data) ? moviesRes.data : moviesRes.data.data || []);
-      loadData('medias');
-    } catch (err) {
-      setError('Error al crear película: ' + (err.response?.data?.message || err.message));
-    }
-  };
-
   return (
-    <div className="main-page">
-      <h1>Sistema de Gestión de Medios</h1>
-
-      <div className="buttons-section">
-        <h2>Hacer petición para ver datos:</h2>
-        <div className="buttons">
-          <button onClick={() => loadData('medias')} disabled={loading}>
-            Ver Películas/Series
-          </button>
-          <button onClick={() => loadData('directores')} disabled={loading}>
-            Ver Directores
-          </button>
-          <button onClick={() => loadData('generos')} disabled={loading}>
-            Ver Géneros
-          </button>
-          <button onClick={() => loadData('productoras')} disabled={loading}>
-            Ver Productoras
-          </button>
-          <button onClick={() => loadData('tipos')} disabled={loading}>
-            Ver Tipos
-          </button>
+    <section className="dashboard">
+      <div className="panel hero-panel">
+        <div>
+          <p className="eyebrow">Caso de estudio</p>
+          <h2>Panel del Administrador</h2>
+          <p className="section-copy">
+            La aplicación separa los cinco módulos exigidos y obliga a relacionar cada publicación con género,
+            director y productora activos.
+          </p>
+        </div>
+        <div className="hero-list">
+          <span>Serial y URL únicos para cada publicación</span>
+          <span>Fechas automáticas de creación y actualización</span>
+          <span>Catálogos iniciales para géneros y tipos</span>
         </div>
       </div>
 
-      <div className="add-section">
-        <h2>Agregar Nueva Película/Serie</h2>
-        <input type="text" placeholder="Título" value={newMedia.title} onChange={e => setNewMedia({...newMedia, title: e.target.value})} />
-        <input type="text" placeholder="Director" value={newMedia.director} onChange={e => setNewMedia({...newMedia, director: e.target.value})} />
-        <input type="number" placeholder="Año" value={newMedia.year} onChange={e => setNewMedia({...newMedia, year: e.target.value})} />
-        <input type="text" placeholder="Género" value={newMedia.genre} onChange={e => setNewMedia({...newMedia, genre: e.target.value})} />
-        <input type="text" placeholder="Tipo" value={newMedia.type} onChange={e => setNewMedia({...newMedia, type: e.target.value})} />
-        <button onClick={handleCreateMedia}>Agregar Película/Serie</button>
+      {error && <div className="message-banner error">{error}</div>}
+
+      <div className="stats-grid">
+        {cards.map((card) => (
+          <article key={card.key} className="panel stat-card">
+            <p className="stat-value">{loading ? '...' : stats[card.key]}</p>
+            <h3>{card.title}</h3>
+            <p>{card.description}</p>
+            <Link to={card.route} className="panel-link">
+              Ir al módulo
+            </Link>
+          </article>
+        ))}
       </div>
-
-      {error && <div className="error">{error}</div>}
-
-      {data && !loading && (
-        <div className="data-display">
-          <h3>{data.type} ({data.data.length} registros)</h3>
-          {data.type === 'Películas/Series' ? (
-            <div className="movies-list">
-              {data.data.map((movie, index) => (
-                <div key={movie._id || index} className="movie-card">
-                  <h4>{movie.title}</h4>
-                  <p><strong>Director:</strong> {movie.director}</p>
-                  <p><strong>Año:</strong> {movie.year}</p>
-                  <p><strong>Género:</strong> {movie.genre}</p>
-                  <p><strong>Tipo:</strong> {movie.type}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="items-list">
-              {data.data.map((item, index) => (
-                <div key={item._id || index} className="item">
-                  <span>{item.nombre}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+    </section>
   );
 }
 

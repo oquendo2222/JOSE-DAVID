@@ -1,20 +1,16 @@
 .list-container {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px 0;
+  margin-top: 16px;
 }
 
 .list-container.empty {
   text-align: center;
   padding: 40px 20px;
-  color: #999;
+  color: var(--muted);
 }
 
 .list-container.empty p {
   font-size: 16px;
-  color: #666;
+  color: var(--muted);
 }
 
 .table-responsive {
@@ -28,10 +24,10 @@
 }
 
 .media-card {
-  border: 1px solid #e6e6e6;
-  border-radius: 10px;
-  padding: 14px;
-  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.72);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -40,7 +36,7 @@
 
 .media-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 16px 28px rgba(91, 54, 28, 0.12);
 }
 
 .media-card-content {
@@ -51,16 +47,17 @@
 
 .media-card-row {
   margin: 0;
-  color: #444;
+  color: var(--text);
   display: flex;
   gap: 6px;
   align-items: baseline;
   line-height: 1.4;
+  flex-wrap: wrap;
 }
 
 .media-card-label {
   font-weight: 700;
-  color: #222;
+  color: #29170b;
 }
 
 .media-card-value {
@@ -77,28 +74,33 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .list-table thead {
-  background-color: #f5f5f5;
+  background-color: rgba(195, 95, 31, 0.08);
 }
 
 .list-table th {
   padding: 12px;
   text-align: left;
   font-weight: 600;
-  color: #333;
-  border-bottom: 2px solid #ddd;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
 }
 
 .list-table td {
   padding: 12px;
-  border-bottom: 1px solid #eee;
-  color: #555;
+  border-bottom: 1px solid rgba(116, 79, 49, 0.12);
+  color: var(--text);
+  vertical-align: top;
 }
 
 .list-table tbody tr:hover {
-  background-color: #fafafa;
+  background-color: rgba(195, 95, 31, 0.04);
 }
 
 .list-table td.actions {
@@ -111,7 +113,7 @@
 .btn-edit, .btn-delete, .btn-danger {
   padding: 6px 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -120,34 +122,32 @@
 }
 
 .btn-edit {
-  background-color: #2196F3;
+  background-color: #2b7bb8;
   color: white;
 }
 
 .btn-edit:hover:not(:disabled) {
-  background-color: #1976D2;
-  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+  background-color: #225f8d;
 }
 
 .btn-delete {
-  background-color: #FF9800;
+  background-color: #d07a2a;
   color: white;
 }
 
 .btn-delete:hover:not(:disabled) {
-  background-color: #F57C00;
-  box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
+  background-color: #b4631a;
 }
 
 .btn-danger {
-  background-color: #f44336;
+  background-color: #bb4a37;
   color: white;
   padding: 4px 8px;
   font-size: 11px;
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #d32f2f;
+  background-color: #9c3525;
 }
 
 .btn:disabled {
@@ -164,7 +164,7 @@
 
 .confirm-delete p {
   font-size: 12px;
-  color: #666;
+  color: var(--muted);
   margin: 0;
   white-space: nowrap;
 }

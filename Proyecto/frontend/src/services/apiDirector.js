@@ -1,8 +1,6 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 
-const API_BASE = 'http://localhost:4000/api';
-
-export const getDirectores = () => axios.get(`${API_BASE}/director`);
-export const createDirector = (data) => axios.post(`${API_BASE}/director`, data);
-export const updateDirector = (id, data) => axios.put(`${API_BASE}/director/${id}`, data);
-export const deleteDirector = (id) => axios.delete(`${API_BASE}/director/${id}`);
+export const getDirectores = (params) => apiClient.get('/director', { params });
+export const createDirector = (data) => apiClient.post('/director', data);
+export const updateDirector = (id, data) => apiClient.put(`/director/${id}`, data);
+export const deleteDirector = (id) => apiClient.delete(`/director/${id}`);

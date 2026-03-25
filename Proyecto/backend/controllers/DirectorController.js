@@ -1,9 +1,17 @@
 const Director = require('../models/Director');
 const { request, response } = require('express');
 
+const buildEstadoFilter = (estado) => {
+    if (!estado) {
+        return {};
+    }
+
+    return { estado };
+};
+
 const getDirectores = async (req = request, res = response) => {
     try {
-        const directores = await Director.find();
+        const directores = await Director.find(buildEstadoFilter(req.query.estado)).sort({ nombre: 1 });
         res.json({
             success: true,
             data: directores
@@ -18,7 +26,7 @@ const getDirectores = async (req = request, res = response) => {
 
 const createDirector = async (req = request, res = response) => {
     try {
-        const { nombre, nacionalidad, fechaNacimiento } = req.body;
+        const { nombre, estado = 'Activo' } = req.body;
         
         if (!nombre) {
             return res.status(400).json({
@@ -27,7 +35,7 @@ const createDirector = async (req = request, res = response) => {
             });
         }
 
-        const directorDb = await Director.findOne({ nombre });
+        const directorDb = await Director.findOne({ nombre: nombre.trim() });
         if (directorDb) {
             return res.status(400).json({
                 success: false,
@@ -35,7 +43,7 @@ const createDirector = async (req = request, res = response) => {
             });
         }
 
-        const director = new Director({ nombre, nacionalidad, fechaNacimiento });
+        const director = new Director({ nombre: nombre.trim(), estado });
         await director.save();
         res.status(201).json({
             success: true,
@@ -53,11 +61,11 @@ const createDirector = async (req = request, res = response) => {
 const updateDirector = async (req = request, res = response) => {
     try {
         const { id } = req.params;
-        const { nombre, nacionalidad, fechaNacimiento } = req.body;
+        const { nombre, estado } = req.body;
 
         const director = await Director.findByIdAndUpdate(
             id,
-            { nombre, nacionalidad, fechaNacimiento },
+            { nombre: nombre?.trim(), estado },
             { new: true, runValidators: true }
         );
 

@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import './List.css';
 
+const getValueByPath = (item, path) => path.split('.').reduce((acc, key) => acc?.[key], item);
+
+const normalizeField = (field) => {
+  if (typeof field === 'string') {
+    return {
+      key: field,
+      label: field.charAt(0).toUpperCase() + field.slice(1),
+    };
+  }
+
+  return field;
+};
+
 const List = ({ items, onEdit, onDelete, fields, viewMode = 'table' }) => {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [loading, setLoading] = useState(null);
+  const normalizedFields = fields.map(normalizeField);
 
   const handleDeleteClick = (id) => {
     setConfirmDelete(id);
@@ -34,11 +48,13 @@ const List = ({ items, onEdit, onDelete, fields, viewMode = 'table' }) => {
           {items.map(item => (
             <article className="media-card" key={item._id}>
               <div className="media-card-content">
-                {fields.map(field => (
-                  <p className="media-card-row" key={`${item._id}-${field}`}>
-                    <span className="media-card-label">{field.charAt(0).toUpperCase() + field.slice(1)}:</span>
-                    <span className="media-card-value">{item[field] ? String(item[field]) : '-'}</span>
-                  </p>
+                {normalizedFields.map(field => (
+                  <div className="media-card-row" key={`${item._id}-${field.key || field.label}`}>
+                    <span className="media-card-label">{field.label}:</span>
+                    <span className="media-card-value">
+                      {field.render ? field.render(item) : (getValueByPath(item, field.key) ? String(getValueByPath(item, field.key)) : '-')}
+                    </span>
+                  </div>
                 ))}
               </div>
               <div className="media-card-actions">
@@ -90,8 +106,8 @@ const List = ({ items, onEdit, onDelete, fields, viewMode = 'table' }) => {
         <table className="list-table">
           <thead>
             <tr>
-              {fields.map(field => (
-                <th key={field}>{field.charAt(0).toUpperCase() + field.slice(1)}</th>
+              {normalizedFields.map(field => (
+                <th key={field.key || field.label}>{field.label}</th>
               ))}
               <th>Acciones</th>
             </tr>
@@ -99,9 +115,9 @@ const List = ({ items, onEdit, onDelete, fields, viewMode = 'table' }) => {
           <tbody>
             {items.map(item => (
               <tr key={item._id}>
-                {fields.map(field => (
-                  <td key={`${item._id}-${field}`}>
-                    {item[field] ? String(item[field]) : '-'}
+                {normalizedFields.map(field => (
+                  <td key={`${item._id}-${field.key || field.label}`}>
+                    {field.render ? field.render(item) : (getValueByPath(item, field.key) ? String(getValueByPath(item, field.key)) : '-')}
                   </td>
                 ))}
                 <td className="actions">

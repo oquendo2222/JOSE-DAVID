@@ -3,6 +3,13 @@ import { getProductoras, createProductora, updateProductora, deleteProductora } 
 import List from "../components/List";
 import Form from "../components/Form";
 
+const estadoOptions = [
+  { value: 'Activo', label: 'Activo' },
+  { value: 'Inactivo', label: 'Inactivo' },
+];
+
+const formatDate = (value) => (value ? new Date(value).toLocaleDateString('es-CO') : '-');
+
 const ProductoraPage = () => {
   const [productoras, setProductoras] = useState([]);
   const [editingProductora, setEditingProductora] = useState(null);
@@ -11,8 +18,17 @@ const ProductoraPage = () => {
 
   const fields = [
     { name: "nombre", label: "Nombre", required: true },
-    { name: "pais", label: "País" },
-    { name: "fundacion", label: "Año de Fundación", type: "number" }
+    { name: "estado", label: "Estado", type: "select", options: estadoOptions, required: true },
+    { name: "slogan", label: "Slogan", required: true },
+    { name: "descripcion", label: "Descripción", type: "textarea", rows: 4, required: true }
+  ];
+
+  const listFields = [
+    { key: 'nombre', label: 'Nombre' },
+    { key: 'estado', label: 'Estado' },
+    { key: 'slogan', label: 'Slogan' },
+    { key: 'descripcion', label: 'Descripción' },
+    { label: 'Actualizado', render: (item) => formatDate(item.fechaActualizacion) },
   ];
 
   useEffect(() => {
@@ -91,7 +107,7 @@ const ProductoraPage = () => {
           items={productoras}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          fields={["nombre", "pais", "fundacion"]}
+          fields={listFields}
         />
       )}
       <div className="form-section">
@@ -99,7 +115,7 @@ const ProductoraPage = () => {
         <Form
           fields={fields}
           onSubmit={editingProductora ? handleUpdate : handleCreate}
-          initialData={editingProductora || {}}
+          initialData={editingProductora || { estado: 'Activo', slogan: '', descripcion: '' }}
           onCancel={editingProductora ? handleCancel : null}
           isEditing={!!editingProductora}
         />

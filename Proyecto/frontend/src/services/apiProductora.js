@@ -1,8 +1,6 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 
-const API_BASE = 'http://localhost:4000/api';
-
-export const getProductoras = () => axios.get(`${API_BASE}/productora`);
-export const createProductora = (data) => axios.post(`${API_BASE}/productora`, data);
-export const updateProductora = (id, data) => axios.put(`${API_BASE}/productora/${id}`, data);
-export const deleteProductora = (id) => axios.delete(`${API_BASE}/productora/${id}`);
+export const getProductoras = (params) => apiClient.get('/productora', { params });
+export const createProductora = (data) => apiClient.post('/productora', data);
+export const updateProductora = (id, data) => apiClient.put(`/productora/${id}`, data);
+export const deleteProductora = (id) => apiClient.delete(`/productora/${id}`);

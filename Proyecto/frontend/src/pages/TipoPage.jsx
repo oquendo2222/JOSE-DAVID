@@ -3,6 +3,8 @@ import { getTipos, createTipo, updateTipo, deleteTipo } from "../services/apiTip
 import List from "../components/List";
 import Form from "../components/Form";
 
+const formatDate = (value) => (value ? new Date(value).toLocaleDateString('es-CO') : '-');
+
 const TipoPage = () => {
   const [tipos, setTipos] = useState([]);
   const [editingTipo, setEditingTipo] = useState(null);
@@ -11,7 +13,13 @@ const TipoPage = () => {
 
   const fields = [
     { name: "nombre", label: "Nombre", required: true },
-    { name: "descripcion", label: "Descripción" }
+    { name: "descripcion", label: "Descripción", type: "textarea", rows: 4, required: true }
+  ];
+
+  const listFields = [
+    { key: 'nombre', label: 'Nombre' },
+    { key: 'descripcion', label: 'Descripción' },
+    { label: 'Actualizado', render: (item) => formatDate(item.fechaActualizacion) },
   ];
 
   useEffect(() => {
@@ -90,7 +98,7 @@ const TipoPage = () => {
           items={tipos}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          fields={["nombre", "descripcion"]}
+          fields={listFields}
         />
       )}
       <div className="form-section">
@@ -98,7 +106,7 @@ const TipoPage = () => {
         <Form
           fields={fields}
           onSubmit={editingTipo ? handleUpdate : handleCreate}
-          initialData={editingTipo || {}}
+          initialData={editingTipo || { descripcion: '' }}
           onCancel={editingTipo ? handleCancel : null}
           isEditing={!!editingTipo}
         />

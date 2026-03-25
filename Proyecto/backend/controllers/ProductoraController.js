@@ -1,9 +1,17 @@
 const Productora = require('../models/Productora');
 const { request, response } = require('express');
 
+const buildEstadoFilter = (estado) => {
+    if (!estado) {
+        return {};
+    }
+
+    return { estado };
+};
+
 const getProductoras = async (req = request, res = response) => {
     try {
-        const productoras = await Productora.find();
+        const productoras = await Productora.find(buildEstadoFilter(req.query.estado)).sort({ nombre: 1 });
         res.json({
             success: true,
             data: productoras
@@ -18,7 +26,7 @@ const getProductoras = async (req = request, res = response) => {
 
 const createProductora = async (req = request, res = response) => {
     try {
-        const { nombre, pais, fundacion } = req.body;
+        const { nombre, estado = 'Activo', slogan = '', descripcion = '' } = req.body;
         
         if (!nombre) {
             return res.status(400).json({
@@ -27,7 +35,7 @@ const createProductora = async (req = request, res = response) => {
             });
         }
 
-        const productoraDb = await Productora.findOne({ nombre });
+        const productoraDb = await Productora.findOne({ nombre: nombre.trim() });
         if (productoraDb) {
             return res.status(400).json({
                 success: false,
@@ -35,7 +43,7 @@ const createProductora = async (req = request, res = response) => {
             });
         }
 
-        const productora = new Productora({ nombre, pais, fundacion });
+        const productora = new Productora({ nombre: nombre.trim(), estado, slogan, descripcion });
         await productora.save();
         res.status(201).json({
             success: true,
@@ -53,11 +61,11 @@ const createProductora = async (req = request, res = response) => {
 const updateProductora = async (req = request, res = response) => {
     try {
         const { id } = req.params;
-        const { nombre, pais, fundacion } = req.body;
+        const { nombre, estado, slogan, descripcion } = req.body;
 
         const productora = await Productora.findByIdAndUpdate(
             id,
-            { nombre, pais, fundacion },
+            { nombre: nombre?.trim(), estado, slogan, descripcion },
             { new: true, runValidators: true }
         );
 

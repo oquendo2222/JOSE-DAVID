@@ -3,6 +3,13 @@ import { getGeneros, createGenero, updateGenero, deleteGenero } from "../service
 import List from "../components/List";
 import Form from "../components/Form";
 
+const estadoOptions = [
+  { value: 'Activo', label: 'Activo' },
+  { value: 'Inactivo', label: 'Inactivo' },
+];
+
+const formatDate = (value) => (value ? new Date(value).toLocaleDateString('es-CO') : '-');
+
 const GeneroPage = () => {
   const [generos, setGeneros] = useState([]);
   const [editingGenero, setEditingGenero] = useState(null);
@@ -11,8 +18,15 @@ const GeneroPage = () => {
 
   const fields = [
     { name: "nombre", label: "Nombre", required: true },
-    { name: "estado", label: "Estado", required: true },
-    { name: "descripcion", label: "Descripción" }
+    { name: "estado", label: "Estado", type: "select", options: estadoOptions, required: true },
+    { name: "descripcion", label: "Descripción", type: "textarea", rows: 4, required: true }
+  ];
+
+  const listFields = [
+    { key: 'nombre', label: 'Nombre' },
+    { key: 'estado', label: 'Estado' },
+    { key: 'descripcion', label: 'Descripción' },
+    { label: 'Actualizado', render: (item) => formatDate(item.fechaActualizacion) },
   ];
 
   useEffect(() => {
@@ -91,7 +105,7 @@ const GeneroPage = () => {
           items={generos}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          fields={["nombre", "estado", "descripcion"]}
+          fields={listFields}
         />
       )}
       <div className="form-section">
@@ -99,7 +113,7 @@ const GeneroPage = () => {
         <Form
           fields={fields}
           onSubmit={editingGenero ? handleUpdate : handleCreate}
-          initialData={editingGenero || {}}
+          initialData={editingGenero || { estado: 'Activo', descripcion: '' }}
           onCancel={editingGenero ? handleCancel : null}
           isEditing={!!editingGenero}
         />

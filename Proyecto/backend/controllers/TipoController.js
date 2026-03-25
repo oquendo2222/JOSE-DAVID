@@ -3,7 +3,7 @@ const { request, response } = require('express');
 
 const getTipos = async (req = request, res = response) => {
     try {
-        const tipos = await Tipo.find();
+        const tipos = await Tipo.find().sort({ nombre: 1 });
         res.json({
             success: true,
             data: tipos
@@ -18,7 +18,7 @@ const getTipos = async (req = request, res = response) => {
 
 const createTipo = async (req = request, res = response) => {
     try {
-        const { nombre, descripcion } = req.body;
+        const { nombre, descripcion = '' } = req.body;
         
         if (!nombre) {
             return res.status(400).json({
@@ -27,7 +27,7 @@ const createTipo = async (req = request, res = response) => {
             });
         }
 
-        const tipoDb = await Tipo.findOne({ nombre });
+        const tipoDb = await Tipo.findOne({ nombre: nombre.trim() });
         if (tipoDb) {
             return res.status(400).json({
                 success: false,
@@ -35,7 +35,7 @@ const createTipo = async (req = request, res = response) => {
             });
         }
 
-        const tipo = new Tipo({ nombre, descripcion });
+        const tipo = new Tipo({ nombre: nombre.trim(), descripcion });
         await tipo.save();
         res.status(201).json({
             success: true,
@@ -57,7 +57,7 @@ const updateTipo = async (req = request, res = response) => {
 
         const tipo = await Tipo.findByIdAndUpdate(
             id,
-            { nombre, descripcion },
+            { nombre: nombre?.trim(), descripcion },
             { new: true, runValidators: true }
         );
 

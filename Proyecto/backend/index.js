@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./db/connection');
+const ensureCatalogData = require('./db/seedData');
 const movieRoutes = require('./routes/movieRoutes');
 const generoRoutes = require('./routes/Generos');
 const directorRoutes = require('./routes/directorRoutes');
@@ -23,7 +24,8 @@ app.use('/api/tipo', tipoRoutes);
 const PORT = process.env.PORT || 3000;
 
 connectDB()
-  .then(() => {
+  .then(async () => {
+    await ensureCatalogData();
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => {

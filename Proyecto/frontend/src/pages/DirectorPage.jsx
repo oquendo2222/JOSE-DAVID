@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import { getDirectores, createDirector, updateDirector, deleteDirector } from "../services/apiDirector";
 import List from "../components/List";
 import Form from "../components/Form";
+const estadoOptions = [
+  { value: 'Activo', label: 'Activo' },
+  { value: 'Inactivo', label: 'Inactivo' },
+];
+
+const formatDate = (value) => (value ? new Date(value).toLocaleDateString('es-CO') : '-');
 
 const DirectorPage = () => {
   const [directores, setDirectores] = useState([]);
@@ -11,8 +17,14 @@ const DirectorPage = () => {
 
   const fields = [
     { name: "nombre", label: "Nombre", required: true },
-    { name: "nacionalidad", label: "Nacionalidad" },
-    { name: "fechaNacimiento", label: "Fecha de Nacimiento", type: "date" }
+    { name: "estado", label: "Estado", type: "select", options: estadoOptions, required: true }
+  ];
+
+  const listFields = [
+    { key: 'nombre', label: 'Nombre' },
+    { key: 'estado', label: 'Estado' },
+    { label: 'Creado', render: (item) => formatDate(item.fechaCreacion) },
+    { label: 'Actualizado', render: (item) => formatDate(item.fechaActualizacion) },
   ];
 
   useEffect(() => {
@@ -91,7 +103,7 @@ const DirectorPage = () => {
           items={directores}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          fields={["nombre", "nacionalidad", "fechaNacimiento"]}
+          fields={listFields}
         />
       )}
       <div className="form-section">

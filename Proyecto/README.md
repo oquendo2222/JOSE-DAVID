@@ -1,185 +1,81 @@
-# Sistema de Gestión de Medios - Películas y Series
+# Sistema de Gestión de Medios
 
 ## Descripción
-Aplicación full-stack extremadamente simple para consultar datos de películas, series, directores, productoras y tipos de contenido. El frontend hace peticiones al backend y muestra los datos en formato JSON.
+Aplicación full-stack para administrar películas y series según el caso de estudio de Ingeniería Web II. El sistema separa cinco módulos: Género, Director, Productora, Tipo y Media.
 
-## Características
-
-### Backend
-- API REST con Express
-- Base de datos MongoDB
-- CRUD completo para:
-  - Películas y Series
-  - Géneros
-  - Directores
-  - Productoras
-  - Tipos
-
-### Frontend
-- Interfaz minimalista con React
-- Botones para hacer peticiones a diferentes endpoints
-- Visualización de datos en formato JSON
-- Sin formularios ni navegación compleja
+## Qué cumple ahora
+- CRUD completo para los cinco módulos.
+- Media con serial único y URL única.
+- Fechas automáticas de creación y actualización en todos los módulos.
+- Media relacionada con género, director, productora y tipo.
+- Restricción para crear o editar media solo con géneros, directores y productoras activas.
+- Catálogo inicial automático para géneros y tipos.
+- Frontend administrativo con navegación por módulos.
 
 ## Requisitos
+- Node.js 18 o superior.
+- MongoDB local o remoto.
+- npm.
 
-- Node.js 18+
-- MongoDB corriendo localmente o cloud URI en `.env`
-- npm o yarn
+## Configuración
+### Backend
+Crear [backend/.env](backend/.env) con:
+
+```env
+PORT=4000
+MONGO_DBIP=mongodb://localhost:27017/media_admin
+```
 
 ## Instalación
-
-### 1. Clonar el proyecto
-```bash
-git clone <repo-url>
-cd Proyecto
-```
-
-### 2. Instalar backend
-```bash
-cd backend
-npm install
-```
-
-### 3. Configurar variables de entorno backend
-Crear archivo `.env` en `backend/`:
-```
-PORT=4000
-MONGO_DBIP=mongodb+srv://joseoquendo_db_user:Henao20072026@cluster0.kadiz6m.mongodb.net/?appName=Cluster0
-```
-
-### 4. Instalar frontend
-```bash
-cd ../frontend
-npm install
-```
-
-## Ejecución
-
 ### Backend
 ```bash
 cd backend
-npm start
+npm install
 ```
-El servidor backend estará disponible en `http://localhost:4000`
 
 ### Frontend
 ```bash
 cd frontend
-npm run dev
-```
-La aplicación frontend estará disponible en `http://localhost:5180`
-
-## Uso
-La aplicación tiene botones para hacer peticiones a diferentes endpoints:
-- **Ver Películas/Series**: Muestra todas las películas y series
-- **Ver Directores**: Muestra todos los directores
-- **Ver Géneros**: Muestra todos los géneros
-- **Ver Productoras**: Muestra todas las productoras
-- **Ver Tipos**: Muestra todos los tipos
-
-Al hacer clic en cualquier botón, se hace una petición HTTP al backend y se muestran los datos en formato JSON crudo.
-MONGO_DBIP=mongodb://localhost:27017/mydb
-```
-
-### 4. Instalar frontend
-```bash
-cd ../frontend
 npm install
 ```
 
 ## Ejecución
-
-### Iniciar MongoDB (si está instalado localmente)
-```bash
-mongod
-```
-
-### Terminal 1 - Backend
+### Terminal 1
 ```bash
 cd backend
 npm run dev
 ```
-El servidor estará en: `http://localhost:3000`
 
-### Terminal 2 - Frontend
+### Terminal 2
 ```bash
 cd frontend
 npm run dev
 ```
-La aplicación estará en: `http://localhost:5173`
 
-## Uso
+## URLs
+- Backend: http://localhost:4000
+- Frontend: http://localhost:5173
 
-1. Abre el navegador en `http://localhost:5173`
-2. Navega por los módulos usando el menú superior
-3. Cada módulo permite:
-   - 📋 Ver lista de registros
-   - ➕ Crear nuevo registro
-   - ✏️ Editar registro existente
-   - 🗑️ Eliminar registro
+## Endpoints principales
+- GET, POST, PUT, DELETE /api/generos
+- GET, POST, PUT, DELETE /api/director
+- GET, POST, PUT, DELETE /api/productora
+- GET, POST, PUT, DELETE /api/tipo
+- GET, POST, PUT, DELETE /api/movies
 
-## Estructura del Proyecto
-
-```
+## Estructura
+```text
 backend/
-├── models/          # Esquemas MongoDB
-├── controllers/     # Lógica de negocio
-├── routes/         # Rutas API
-├── db/             # Conexión DB
-└── index.js        # Servidor principal
-
+  controllers/
+  db/
+  models/
+  routes/
+  index.js
 frontend/
-├── src/
-│   ├── components/  # Form.js, List.js reutilizables
-│   ├── pages/      # Páginas de cada módulo
-│   ├── services/   # Llamadas API con axios
-│   ├── App.jsx     # Routing principal
-│   └── index.css   # Estilos globales
+  src/
+    components/
+    pages/
+    services/
+    App.jsx
+    main.jsx
 ```
-
-## API Endpoints
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | /api/movies | Listar películas/series |
-| POST | /api/movies | Crear película/serie |
-| PUT | /api/movies/:id | Actualizar película/serie |
-| DELETE | /api/movies/:id | Eliminar película/serie |
-| GET | /api/generos | Listar géneros |
-| POST | /api/generos | Crear género |
-| PUT | /api/generos/:id | Actualizar género |
-| DELETE | /api/generos/:id | Eliminar género |
-| GET | /api/director | Listar directores |
-| POST | /api/director | Crear director |
-| PUT | /api/director/:id | Actualizar director |
-| DELETE | /api/director/:id | Eliminar director |
-| GET | /api/productora | Listar productoras |
-| POST | /api/productora | Crear productora |
-| PUT | /api/productora/:id | Actualizar productora |
-| DELETE | /api/productora/:id | Eliminar productora |
-| GET | /api/tipo | Listar tipos |
-| POST | /api/tipo | Crear tipo |
-| PUT | /api/tipo/:id | Actualizar tipo |
-| DELETE | /api/tipo/:id | Eliminar tipo |
-
-## Tecnologías Utilizadas
-
-### Backend
-- **Express** - Framework web
-- **Mongoose** - ODM para MongoDB
-- **CORS** - Cross-Origin Resource Sharing
-- **Nodemon** - Reinicio automático en desarrollo
-- **dotenv** - Variables de entorno
-
-### Frontend
-- **React 19** - Librería UI
-- **React Router** - Navegación
-- **Axios** - Cliente HTTP
-- **Vite** - Build tool
-
-## Licencia
-ISC
-
-## Autor
-Jose David Oquendo Henao

@@ -47,21 +47,54 @@ const Form = ({ fields, onSubmit, initialData = {}, onCancel, isEditing = false 
     }
   };
 
+  const renderField = (field) => {
+    const value = formData[field.name] || '';
+    const commonProps = {
+      id: field.name,
+      name: field.name,
+      value,
+      onChange: handleChange,
+      placeholder: field.placeholder || `Ingresa ${field.label.toLowerCase()}`,
+      className: errors[field.name] ? 'input-error' : '',
+      disabled: loading || field.disabled,
+    };
+
+    if (field.type === 'textarea') {
+      return <textarea {...commonProps} rows={field.rows || 4} />;
+    }
+
+    if (field.type === 'select') {
+      return (
+        <select {...commonProps}>
+          <option value="">Selecciona una opción</option>
+          {(field.options || []).map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      );
+    }
+
+    return (
+      <input
+        {...commonProps}
+        type={field.type || 'text'}
+        min={field.min}
+        max={field.max}
+        step={field.step}
+      />
+    );
+  };
+
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit} className="form">
         {fields.map(field => (
           <div key={field.name} className="form-group">
             <label htmlFor={field.name}>{field.label}</label>
-            <input
-              id={field.name}
-              type={field.type || 'text'}
-              name={field.name}
-              value={formData[field.name] || ''}
-              onChange={handleChange}
-              placeholder={`Ingresa ${field.label.toLowerCase()}`}
-              className={errors[field.name] ? 'input-error' : ''}
-            />
+            {renderField(field)}
+            {field.helpText && <small className="field-help">{field.helpText}</small>}
             {errors[field.name] && (
               <span className="error-message">{errors[field.name]}</span>
             )}

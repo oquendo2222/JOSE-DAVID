@@ -1,9 +1,17 @@
 const Generos = require('../models/Generos');
 const { request, response } = require('express');
 
+const buildEstadoFilter = (estado) => {
+    if (!estado) {
+        return {};
+    }
+
+    return { estado };
+};
+
 const getGeneros = async (req = request, res = response) => {
     try {
-        const generos = await Generos.find();
+        const generos = await Generos.find(buildEstadoFilter(req.query.estado)).sort({ nombre: 1 });
         res.json({
             success: true,
             data: generos
@@ -18,7 +26,7 @@ const getGeneros = async (req = request, res = response) => {
 
 const createGenero = async (req = request, res = response) => {
     try {
-        const { nombre, descripcion, estado } = req.body;
+        const { nombre, descripcion = '', estado = 'Activo' } = req.body;
         
         if (!nombre) {
             return res.status(400).json({
@@ -27,7 +35,7 @@ const createGenero = async (req = request, res = response) => {
             });
         }
 
-        const generoDb = await Generos.findOne({ nombre });
+        const generoDb = await Generos.findOne({ nombre: nombre.trim() });
         if (generoDb) {
             return res.status(400).json({
                 success: false,
@@ -35,7 +43,7 @@ const createGenero = async (req = request, res = response) => {
             });
         }
 
-        const genero = new Generos({ nombre, descripcion, estado });
+        const genero = new Generos({ nombre: nombre.trim(), descripcion, estado });
         await genero.save();
         res.status(201).json({
             success: true,
@@ -57,7 +65,7 @@ const updateGenero = async (req = request, res = response) => {
 
         const genero = await Generos.findByIdAndUpdate(
             id,
-            { nombre, descripcion, estado, fechadeactualizacion: Date.now() },
+            { nombre: nombre?.trim(), descripcion, estado },
             { new: true, runValidators: true }
         );
 
