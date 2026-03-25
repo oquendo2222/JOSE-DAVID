@@ -3,7 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./db/connection');
 const movieRoutes = require('./routes/movieRoutes');
-const generoRoutes = require('./routes/Geneross');
+const generoRoutes = require('./routes/Generos');
+const directorRoutes = require('./routes/directorRoutes');
+const productoraRoutes = require('./routes/productoraRoutes');
+const tipoRoutes = require('./routes/tipoRoutes');
 
 const app = express();
 
@@ -14,6 +17,9 @@ app.use(express.json());
 // routes
 app.use('/api/movies', movieRoutes);
 app.use('/api/generos', generoRoutes);
+app.use('/api/director', directorRoutes);
+app.use('/api/productora', productoraRoutes);
+app.use('/api/tipo', tipoRoutes);
 const PORT = process.env.PORT || 3000;
 
 connectDB()

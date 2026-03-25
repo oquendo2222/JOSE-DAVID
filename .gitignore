@@ -1,1 +1,9 @@
-/Documents/Repositorios/CompuWorkGit/target/
+# Ignore everything at repo root by default
+/*
+
+# Keep this file tracked
+!/.gitignore
+
+# Track only the actual project folder
+!/Proyecto/
+!/Proyecto/**

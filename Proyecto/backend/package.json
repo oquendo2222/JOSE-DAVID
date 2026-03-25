@@ -9,7 +9,11 @@
     "dev": "nodemon index.js"
   },
   "keywords": [
-    "MongoDb, API RESET"
+    "MongoDB",
+    "API",
+    "REST",
+    "Express",
+    "Node.js"
   ],
   "author": "Jose David Oquendo Henao",
   "license": "ISC",

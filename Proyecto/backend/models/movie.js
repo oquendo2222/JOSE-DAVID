@@ -5,6 +5,7 @@ const MovieSchema = new mongoose.Schema({
   director: String,
   year: Number,
   genre: String,
+  type: { type: String, required: true }, // Película o Serie
   createdAt: { type: Date, default: Date.now }
 });
 
