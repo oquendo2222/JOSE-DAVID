@@ -1,0 +1,190 @@
+.list-container {
+  margin-top: 16px;
+}
+
+.list-container.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+}
+
+.list-container.empty p {
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.media-card {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.media-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(91, 54, 28, 0.12);
+}
+
+.media-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.media-card-row {
+  margin: 0;
+  color: var(--text);
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  line-height: 1.4;
+  flex-wrap: wrap;
+}
+
+.media-card-label {
+  font-weight: 700;
+  color: #29170b;
+}
+
+.media-card-value {
+  word-break: break-word;
+}
+
+.media-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.list-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.list-table thead {
+  background-color: rgba(195, 95, 31, 0.08);
+}
+
+.list-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.list-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(116, 79, 49, 0.12);
+  color: var(--text);
+  vertical-align: top;
+}
+
+.list-table tbody tr:hover {
+  background-color: rgba(195, 95, 31, 0.04);
+}
+
+.list-table td.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-edit, .btn-delete, .btn-danger {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.btn-edit {
+  background-color: #2b7bb8;
+  color: white;
+}
+
+.btn-edit:hover:not(:disabled) {
+  background-color: #225f8d;
+}
+
+.btn-delete {
+  background-color: #d07a2a;
+  color: white;
+}
+
+.btn-delete:hover:not(:disabled) {
+  background-color: #b4631a;
+}
+
+.btn-danger {
+  background-color: #bb4a37;
+  color: white;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #9c3525;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirm-delete {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.confirm-delete p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .list-table {
+    font-size: 12px;
+  }
+
+  .list-table th,
+  .list-table td {
+    padding: 8px;
+  }
+
+  .btn-edit, .btn-delete {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}

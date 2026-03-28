@@ -1,0 +1,75 @@
+:root {
+  --page: #f7efe4;
+  --panel: rgba(255, 250, 244, 0.96);
+  --border: rgba(116, 79, 49, 0.18);
+  --text: #34261b;
+  --muted: #6f6255;
+  --accent: #c35f1f;
+  --accent-strong: #8a3f0f;
+  --heading: "Space Grotesk", "Segoe UI", sans-serif;
+  --body: "Manrope", "Segoe UI", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top left, #ffe1b8 0%, #f7efe4 42%, #f2e5d6 100%);
+  font-family: var(--body);
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--text);
+}
+
+#root {
+  width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--heading);
+  line-height: 1.05;
+  color: #2c1708;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.3rem);
+}
+
+h2 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
